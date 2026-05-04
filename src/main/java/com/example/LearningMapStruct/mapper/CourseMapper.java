@@ -12,7 +12,7 @@ public interface CourseMapper {
     CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
     
     @Mapping(source = "teacher.id", target = "teacherId")
-    @Mapping(target = "students", ignore = true)
+    @Mapping(target = "studentIds", ignore = true)
     CourseDTO toDTO(Course course);
     
     @Mapping(target = "teacher", ignore = true)
