@@ -41,7 +41,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-      delete_packages: write
 
     steps:
       - uses: actions/checkout@v4
