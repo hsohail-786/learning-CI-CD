@@ -30,6 +30,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean package
+        env:
+          DBUSERNAME: ${{ secrets.DBUSERNAME }}
+          DBPASSWORD: ${{ secrets.DBPASSWORD }}
+          DB_URL: ${{ secrets.DB_URL }}
 
       - name: Publish to github packages apache maven
         if: ${{ github.event_name == 'push' }}
