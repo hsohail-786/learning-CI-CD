@@ -53,6 +53,22 @@ jobs:
           server-id: github
           settings-path: ${{ github.workspace }}
 
+      # 🔥 CRITICAL FIX: correct Maven authentication
+      - name: Configure Maven settings
+        run: |
+          mkdir -p ~/.m2
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>github</id>
+                <username>x-access-token</username>
+                <password>${{ github.token }}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+
       - name: Deploy to GitHub Packages
         run: mvn clean deploy -DskipTests
         env:
