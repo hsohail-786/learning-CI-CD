@@ -69,6 +69,10 @@ jobs:
           EOF
 
       - name: Deploy to GitHub Packages
-        run: mvn clean deploy -DskipTests
+        run: |
+          TAG=${{ github.ref_name }}
+          VERSION=${TAG#v}
+          echo "Deploying version: $VERSION"
+          mvn clean deploy -DskipTests -Drevision=$VERSION
         env:
           GITHUB_TOKEN: ${{ github.token }}
