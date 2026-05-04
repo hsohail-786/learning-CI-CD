@@ -68,25 +68,6 @@ jobs:
           </settings>
           EOF
 
-      - name: Delete existing package version if exists
-        run: |
-          TAG=${{ github.ref_name }}
-          VERSION=${TAG#v}
-          PACKAGE_VERSION_ID=$(curl -s \
-            -H "Authorization: Bearer ${{ github.token }}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/user/packages/maven/com.example.LearningMapStruct/versions" \
-            | jq -r ".[] | select(.name == \"$VERSION\") | .id")
-          if [ -n "$PACKAGE_VERSION_ID" ]; then
-            echo "Deleting existing version $VERSION (id: $PACKAGE_VERSION_ID)"
-            curl -s -X DELETE \
-              -H "Authorization: Bearer ${{ github.token }}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/user/packages/maven/com.example.LearningMapStruct/versions/$PACKAGE_VERSION_ID"
-          else
-            echo "No existing version $VERSION found, proceeding with deploy"
-          fi
-
       - name: Deploy to GitHub Packages
         run: |
           TAG=${{ github.ref_name }}
