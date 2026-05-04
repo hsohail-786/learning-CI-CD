@@ -68,11 +68,23 @@ jobs:
           </settings>
           EOF
 
+      - name: Test GitHub Packages auth
+        run: |
+            TAG=${{ github.ref_name }}
+            VERSION=${TAG#v}
+            echo "Testing upload of version: $VERSION"
+            curl -v \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Content-Type: application/octet-stream" \
+            --upload-file pom.xml \
+            "https://maven.pkg.github.com/hsohail-786/learning-CI-CD/com/example/LearningMapStruct/$VERSION/LearningMapStruct-$VERSION.pom" \
+            2>&1
+
       - name: Deploy to GitHub Packages
         run: |
-          TAG=${{ github.ref_name }}
-          VERSION=${TAG#v}
-          echo "Deploying version: $VERSION"
-          mvn clean deploy -DskipTests -Drevision=$VERSION -e
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+                TAG=${{ github.ref_name }}
+                VERSION=${TAG#v}
+                echo "Deploying version: $VERSION"
+                mvn clean deploy -DskipTests -Drevision=$VERSION -e
+              env:
+                GITHUB_TOKEN: ${{ github.token }}
